@@ -61,4 +61,4 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
                                db="fifa"))
 
 df_jugadores.to_sql('fifa20', engine, chunksize=500000,
-          method='multi', index=False, if_exists='append')
+          method='multi', index=False, if_exists='replace')
