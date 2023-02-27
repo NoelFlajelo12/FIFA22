@@ -8,11 +8,11 @@ ruta=os.getcwd()
 df_jugadores = pd.read_csv(ruta +"\\fifa20\\players_20.csv", sep=",")
 df_equipos = pd.read_csv(ruta+"\\fifa20\\teams_and_leagues.csv", sep=",")
 
-print("¿Hay valores nulos?")
-print(df_jugadores.isnull().values.all())
-
 del df_jugadores['sofifa_id']
 del df_jugadores['player_url']
+del df_jugadores['loaned_from']
+del df_jugadores['real_face']
+del df_jugadores['body_type']
 del df_jugadores['ls']
 del df_jugadores['st']
 del df_jugadores['rs']
@@ -62,3 +62,32 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
 
 df_jugadores.to_sql('fifa20', engine, chunksize=500000,
           method='multi', index=False, if_exists='replace')
+
+df_jugador = df_jugadores[['short_name','long_name','age','dob','height_cm','weight_kg','nationality','club','overall','player_positions']].copy()
+df_jugador.to_sql('jugador', engine, chunksize=500000,
+          method='multi', index=False, if_exists='replace')
+
+df_club = df_jugadores[['club','team_position','team_jersey_number' ]].copy()
+df_club.to_sql('club', engine, chunksize=500000,
+            method='multi', index=False, if_exists='replace')
+            
+df_nacionalidad = df_jugadores[['nationality','nation_position','nation_jersey_number' ]].copy()
+df_nacionalidad.to_sql('nacionalidad', engine, chunksize=500000,
+            method='multi', index=False, if_exists='replace')
+
+df_habilidad = df_jugadores[['overall','potential','international_reputation','skill_moves','weak_foot', 'work_rate']].copy()
+df_habilidad.to_sql('habilidad', engine, chunksize=500000,
+            method='multi', index=False, if_exists='replace')
+
+df_habilidad_jugador = df_jugadores[['player_positions','pace','shooting','passing','dribbling','defending','physic']].copy()
+df_habilidad_jugador.to_sql('habilidad_jugador', engine, chunksize=500000,
+            method='multi', index=False, if_exists='replace')
+
+df_habilidad_portero = df_jugadores[['player_positions','gk_diving','gk_handling','gk_kicking','gk_reflexes','gk_speed','gk_positioning']].copy()
+df_habilidad_portero.to_sql('habilidad_portero', engine, chunksize=500000,
+            method='multi', index=False, if_exists='replace')
+
+df_fisico = df_jugadores[['height_cm','weight_kg','attacking_heading_accuracy','movement_agility','movement_reactions','power_jumping','power_strength','power_stamina']].copy()
+df_fisico.to_sql('altura', engine, chunksize=500000,
+            method='multi', index=False, if_exists='replace')
+
